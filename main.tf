@@ -89,3 +89,28 @@ resource "aws_lb" "website" {
     aws_subnet.public2.id
   ]
 }
+resource "aws_security_group" "web" {
+  name        = "dev-web-sg"
+  description = "Security group for web layer"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    description = "Allow HTTP from internet"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    description = "Allow all outbound traffic"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "dev-web-sg"
+  }
+}
